@@ -87,7 +87,8 @@ const obj = {
                     this.getClassCategoryActives(className, category).then((data) => {
                         json.push({
                             'name': category,
-                            'children': data
+                            'children': data,
+                            'treeLevel': 4
                         });
                         if (--total === 0) {
                             resolve(json);
@@ -148,27 +149,31 @@ const obj = {
         return new Promise((resolve, reject) => {
             let json = {
                 'name': 'classes',
-                'children': []
+                'children': [],
+                'treeLevel': 1
             };
             let total = 0;
             this.getClasses().then((classes) => {
                 classes.forEach((className) => {
                     let currentClass = {
                         'name': className,
-                        'children': []
+                        'children': [],
+                        'treeLevel': 2
                     };
                     json.children.push(currentClass);
                     total++;
                     this.getClassPassives(className).then((passives) => {
                         currentClass.children.push({
                             'name': 'Compétences passives',
-                            'children': passives
+                            'children': passives,
+                            'treeLevel': 3
                         });
                         return this.getClassActives(className);
                     }).then((actives) => {
                         currentClass.children.push({
                             'name': 'Compétences actives',
-                            'children': actives
+                            'children': actives,
+                            'treeLevel': 3
                         });
                         if (--total === 0) {
                             resolve(json);
