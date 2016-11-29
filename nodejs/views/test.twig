@@ -1,4 +1,17 @@
 {% extends 'layout.twig' %}
+
+{% block body %}
+    <div class="flex">
+        <div id="svg"></div>
+        <div id="infos">
+        <div id="infos-centered">
+            <h2>Hello</h2>
+            <p>CHEVRE</p>
+        </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block javascript %}
 <script src="/javascripts/d3.v3.min.js"></script>
 <script>
@@ -13,11 +26,12 @@ var luminance = d3.scale.sqrt()
     .clamp(true)
     .range([90, 20]);
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#svg").append("svg")
     .attr("width", margin.left + margin.right)
     .attr("height", margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
 var partition = d3.layout.partition()
     .sort(function(a, b) { return d3.ascending(a.name, b.name); })
@@ -58,7 +72,10 @@ d3.json("/spells", function(error, root) {
 
     var center = svg.append("circle")
         .attr("r", radius / 3)
-        .on("click", zoomOut);
+        .on("click", function(d) {
+            zoomOut(d);
+            deleteLatestInfos();
+        });
 
     center.append("svg:title")
         .text("zoom out");
@@ -75,22 +92,23 @@ d3.json("/spells", function(error, root) {
         })
         .each(function(d) { 
             this._current = updateArc(d); })
-        .on("click", zoomIn)
+        .on("click", function(d) {
+            zoomIn(d);
+            updateInfos(d);
+        })
         .on("mouseover", function(d) {
             tooltipOver(d);
         })
         .on("mouseout", function(d) {
             tooltipOut(d);
         });
-//     g.append("text")
-//         .attr("class", "nodetext")
-//         .attr('x', 8)
-//         .attr('dy', 28)
-//         .append("textPath")
-//         .attr("href", function (d,i) { return "#" + i; })
-//         .text(function (d) {
-//             return d.name;
-//         });
+//    g.append("text")
+//        .attr("class", "nodetext")
+//        .append("textPath")
+//        .attr("href", function (d,i) { return "#" + i; })
+//        .text(function (d) {
+//            return d.name;
+//        });
 
 
     function zoomIn(p) {
@@ -145,7 +163,10 @@ d3.json("/spells", function(error, root) {
         path.enter().append("path")
             .style("fill-opacity", function(d) { return d.depth === 2 - (root === p) ? 1 : 0; })
             .style("fill", function(d) { return d.fill; })
-            .on("click", zoomIn)
+            .on("click", function(d) {
+                zoomIn(d);
+                updateInfos(d);
+            })
             .each(function(d) { this._current = enterArc(d); })
             .on("mouseover", function(d) {
                 tooltipOver(d);
@@ -207,6 +228,28 @@ function tooltipOut(d) {
     tooltip.transition()
         .duration(300)
         .style("opacity", 0);
+}
+
+function updateInfos(d) {
+    let node = document.getElementById("infos-centered");
+    let html = '<div';
+    if (!d.children) {
+        if (node.lastChild.id === 'last') {
+            node.removeChild(node.lastChild);
+        }
+        html += ' id="last"'
+    }
+
+    html +="><h2>" + d.name + "</h2>";
+    if (d.description) {
+        html += "<p>" + d.description + "</p>";
+    }
+    node.innerHTML += html;
+}
+
+function deleteLatestInfos() {
+    let node = document.getElementById("infos-centered");
+    node.removeChild(node.lastChild) ;
 }
 </script>
 {% endblock %}

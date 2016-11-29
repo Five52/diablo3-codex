@@ -40,3 +40,15 @@ div.tooltip {
 div.tooltip>* {
     margin: 10px auto;
 }
+
+.flex {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+#infos {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
