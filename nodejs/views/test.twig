@@ -16,7 +16,7 @@
 <script src="/javascripts/d3.v3.min.js"></script>
 <script>
 
-var margin = {top: 350, right: 480, bottom: 350, left: 480},
+var margin = {top: 200, right: 200, bottom: 200, left: 200},
     radius = Math.min(margin.top, margin.right, margin.bottom, margin.left) - 10;
 
 var hue = d3.scale.category10();
@@ -24,7 +24,7 @@ var hue = d3.scale.category10();
 var luminance = d3.scale.sqrt()
     .domain([0, 1e6])
     .clamp(true)
-    .range([90, 20]);
+    .range([50, 20]);
 
 var svg = d3.select("#svg").append("svg")
     .attr("width", margin.left + margin.right)

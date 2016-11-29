@@ -1,6 +1,15 @@
+* {
+    box-sizeing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-  padding: 50px;
+  min-height: 100vh;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
 }
 
 a {
@@ -30,7 +39,7 @@ div.tooltip {
     max-width: 600px;
     height: auto;
     padding: 10px;
-    background: #999;
+    background: #fff;
     border: 0px;
     border-radius: 100px;
     pointer-events: none;
@@ -44,10 +53,11 @@ div.tooltip>* {
 .flex {
     display: flex;
     flex-flow: row nowrap;
+    justify-content: space-around;
 }
 
 #infos {
-    flex: 1;
+    width: 50%;
     display: flex;
     flex-flow: column;
     justify-content: center;
