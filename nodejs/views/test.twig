@@ -4,10 +4,10 @@
     <div class="flex">
         <div id="svg"></div>
         <div id="infos">
-        <div id="infos-centered">
-            <h2>Hello</h2>
-            <p>CHEVRE</p>
-        </div>
+            <div id="infos-centered">
+                <h2>Données sélectionnées:</h2>
+                <div id="infos-displayed"></div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -15,6 +15,9 @@
 {% block javascript %}
 <script src="/javascripts/d3.v3.min.js"></script>
 <script>
+
+var countNode = 0;
+var activeComp = true;
 
 var margin = {top: 200, right: 200, bottom: 200, left: 200},
     radius = Math.min(margin.top, margin.right, margin.bottom, margin.left) - 10;
@@ -88,7 +91,7 @@ d3.json("/spells", function(error, root) {
         .attr("id", function (d, i) {return i;})
         .style("fill", function(d) { return d.fill; })
         .text(function(d) {
-            return d.name;
+            return d;
         })
         .each(function(d) { 
             this._current = updateArc(d); })
@@ -107,7 +110,7 @@ d3.json("/spells", function(error, root) {
 //        .append("textPath")
 //        .attr("href", function (d,i) { return "#" + i; })
 //        .text(function (d) {
-//            return d.name;
+//            return d;
 //        });
 
 
@@ -231,25 +234,136 @@ function tooltipOut(d) {
 }
 
 function updateInfos(d) {
-    let node = document.getElementById("infos-centered");
+    let node = document.getElementById("infos-displayed");
     let html = '<div';
-    if (!d.children) {
-        if (node.lastChild.id === 'last') {
-            node.removeChild(node.lastChild);
-        }
-        html += ' id="last"'
+    let titleElem = "";
+    let currentElem = d;
+
+    switch (countNode) {
+        case 0: //INIT, rien de select
+            countNode++;
+            titleElem = "Classe";
+            if (node.lastChild) {
+                if (node.lastChild.id === 'init') {
+                    node.removeChild(node.lastChild);
+                }
+            }
+
+            if (d.treeLevel == 2) { //click sur class
+                currentElem =  d;             
+            } else { //click sur type
+                currentElem =  d.parent;
+            }
+
+            html += ' id="init"';
+            break;
+        case 1: //CLASSE
+            countNode++;
+            titleElem = "Type";
+            if (node.lastChild.id === 'classe') {
+                node.removeChild(node.lastChild);
+            }
+
+            if (d.treeLevel == 3) { //click sur type
+                currentElem =  d;             
+            } else {  //click catégorie (active) ou compétence (passive)
+                currentElem =  d.parent;                
+            }
+
+            html += ' id="classe"';
+            break;
+        case 2: //TYPE
+            countNode++;
+            if (d.children) { //actif
+                titleElem = "Catégorie";
+                activeComp = true;
+                if (node.lastChild.id === 'type') {
+                    node.removeChild(node.lastChild);
+                }
+
+                if (d.treeLevel == 4) { //catégorie
+                    currentElem =  d;             
+                } else { //compétence
+                    currentElem =  d.parent;
+                }
+
+                html += ' id="type"';
+            } else { //compétence (passif)
+                titleElem = "Compétence";
+                if (node.lastChild.id === 'last') {
+                    node.removeChild(node.lastChild);
+                }
+                currentElem = d;
+                html += ' id="last"';
+                activeComp = false;
+            }
+            break;
+        case 3: //CATEGORIE OU COMPETENCES
+            if (d.spell == "passive") { //passif: COMPETENCES
+                countNode = 3;
+                titleElem = "Compétence";
+                if (node.lastChild.id === 'last') {
+                    node.removeChild(node.lastChild);
+                }
+                currentElem = d;
+                html += ' id="last"';
+            } else { //actif: CATEGORIE
+                countNode++;
+                titleElem = "Compétence";
+                if (node.lastChild.id === 'skill') {
+                     node.removeChild(node.lastChild);
+                }
+
+                if (d.class_name) { //compétences
+                    currentElem =  d;                                 
+                } else { //rune
+                    currentElem =  d.parent;
+                }
+
+                html += ' id="skill"';
+            }
+            break;
+        case 4: //COMPETENCE ACTIVE
+            countNode++; //RUNES
+            titleElem = "Rune";
+            currentElem = d;
+            html += ' id="last"';
+            break;
+        case 5: //RUNES
+            countNode = 5;
+            titleElem = "Rune";
+            if (node.lastChild.id === 'last') {
+                node.removeChild(node.lastChild);
+            }
+            currentElem = d;
+            html += ' id="last"';
+            break;
     }
 
-    html +="><h2>" + d.name + "</h2>";
-    if (d.description) {
-        html += "<p>" + d.description + "</p>";
+    html +="><h3>" + titleElem + ": " + currentElem.name + "</h3>";
+    if (currentElem.description) {
+        html += "<p>" + currentElem.description + "</p>";
     }
+    html += "</div>";
     node.innerHTML += html;
 }
 
 function deleteLatestInfos() {
-    let node = document.getElementById("infos-centered");
-    node.removeChild(node.lastChild) ;
+    let node = document.getElementById("infos-displayed");
+    if (countNode != 0) {
+        if (countNode == 5 && activeComp || countNode == 3 && !activeComp){
+            countNode -= 2;
+            node.removeChild(node.lastChild);
+        } else {
+            countNode --;
+            node.removeChild(node.lastChild);
+        }
+    } else {
+        if (node.lastChild) {
+            node.removeChild(node.lastChild);
+        }
+    }
+   return; 
 }
 </script>
 {% endblock %}
