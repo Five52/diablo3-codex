@@ -25,8 +25,16 @@ router.get('/insertWeapons', function(req, res, next) {
     });
 });
 
-router.get('/test', function(req, res, next) {
-    res.render('test');
+router.get('/spells', function(req, res, next) {
+    res.render('spells');
+});
+
+router.get('/armors', function(req, res, next) {
+    res.render('armors');
+});
+
+router.get('/weapons', function(req, res, next) {
+    res.render('weapons');
 });
 
 router.get('/api/spells', function(req, res, next) {
