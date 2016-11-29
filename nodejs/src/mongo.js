@@ -161,13 +161,13 @@ const obj = {
                     total++;
                     this.getClassPassives(className).then((passives) => {
                         currentClass.children.push({
-                            'name': 'passives',
+                            'name': 'Compétences passives',
                             'children': passives
                         });
                         return this.getClassActives(className);
                     }).then((actives) => {
                         currentClass.children.push({
-                            'name': 'actives',
+                            'name': 'Compétences actives',
                             'children': actives
                         });
                         if (--total === 0) {

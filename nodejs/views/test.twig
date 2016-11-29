@@ -31,6 +31,10 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return radius / 3 * d.depth; })
     .outerRadius(function(d) { return radius / 3 * (d.depth + 1) - 1; });
 
+var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
 d3.json("/spells", function(error, root) {
     if (error) throw error;
 
@@ -59,13 +63,35 @@ d3.json("/spells", function(error, root) {
     center.append("svg:title")
         .text("zoom out");
 
-    var path = svg.selectAll("path")
+    var g = svg.selectAll("path")
         .data(partition.nodes(root).slice(1))
-        .enter().append("path")
+        .enter();
+    var path = g.append("path")
         .attr("d", arc)
+        .attr("id", function (d, i) {return i;})
         .style("fill", function(d) { return d.fill; })
-        .each(function(d) { this._current = updateArc(d); })
-        .on("click", zoomIn);
+        .text(function(d) {
+            return d.name;
+        })
+        .each(function(d) { 
+            this._current = updateArc(d); })
+        .on("click", zoomIn)
+        .on("mouseover", function(d) {
+            tooltipOver(d);
+        })
+        .on("mouseout", function(d) {
+            tooltipOut(d);
+        });
+//     g.append("text")
+//         .attr("class", "nodetext")
+//         .attr('x', 8)
+//         .attr('dy', 28)
+//         .append("textPath")
+//         .attr("href", function (d,i) { return "#" + i; })
+//         .text(function (d) {
+//             return d.name;
+//         });
+
 
     function zoomIn(p) {
         if (p.depth > 1) p = p.parent;
@@ -120,7 +146,13 @@ d3.json("/spells", function(error, root) {
             .style("fill-opacity", function(d) { return d.depth === 2 - (root === p) ? 1 : 0; })
             .style("fill", function(d) { return d.fill; })
             .on("click", zoomIn)
-            .each(function(d) { this._current = enterArc(d); });
+            .each(function(d) { this._current = enterArc(d); })
+            .on("mouseover", function(d) {
+                tooltipOver(d);
+            })
+            .on("mouseout", function(d) {
+                tooltipOut(d);
+            });
 
             path.transition()
                 .style("fill-opacity", 1)
@@ -157,5 +189,24 @@ function updateArc(d) {
 
 d3.select(self.frameElement).style("height", margin.top + margin.bottom + "px");
 
+function tooltipOver(d) {
+    var details = "<h2>" + d.name + "</h2>";
+    if (d.description) {
+        details += "<p>" + d.description + "</p>";
+}
+    tooltip.transition()
+        .duration(500)
+        .style("opacity", .8);
+    tooltip.html(details)
+        .style("left", (d3.event.pageX + -100) + "px")
+        .style("top", (d3.event.pageY + 30) + "px");
+
+}
+function tooltipOut(d) {
+    d3.selectAll(".details").remove();
+    tooltip.transition()
+        .duration(300)
+        .style("opacity", 0);
+}
 </script>
 {% endblock %}

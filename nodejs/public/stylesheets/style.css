@@ -15,3 +15,28 @@ circle {
     fill: none;
     pointer-events: all;
 }
+
+text {
+    font-size: 14pt;
+    fill: black;
+}
+
+div.tooltip {
+    font-size: 12px;
+    color: #000;
+    position: absolute;
+    text-align: center;
+    width: auto;
+    max-width: 600px;
+    height: auto;
+    padding: 10px;
+    background: #999;
+    border: 0px;
+    border-radius: 100px;
+    pointer-events: none;
+    box-shadow: 2px 2px 2px 0px gray;
+}
+
+div.tooltip>* {
+    margin: 10px auto;
+}
