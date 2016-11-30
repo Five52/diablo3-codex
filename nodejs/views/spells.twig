@@ -212,6 +212,24 @@ d3.select(self.frameElement).style("height", margin.top + margin.bottom + "px");
 
 function tooltipOver(d) {
     var details = "<h2>" + d.name + "</h2>";
+    if (countNode == 0 || countNode == 1) {
+        details += '<div id="class_details">';
+        if (d.class_image) {
+            details += '<img src="'+ d.class_image +'" />'
+            details += '<p>Ressource : ' + d.ressource + '</p>';
+            details += '<p class="characs">Caractéristiques : ';
+            first = true;
+            for (key in d.characteristics) {
+                if (!first) {
+                    details += ', ';
+                }
+                details += d.characteristics[key];
+                first = false;
+            }
+            details += '</p>';
+        }
+        details += '</div>';
+    }
     if (d.description) {
         details += "<p>" + restoreMultiline(d.description) + "</p>";
 }

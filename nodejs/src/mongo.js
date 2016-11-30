@@ -18,6 +18,47 @@ const obj = {
             });
         });
     },
+    insertAll() {
+        return new Promise((resolve, reject) => {
+            this.insertSpells().then(() => {
+                return this.insertArmors();
+            }).then(() => {
+                return this.insertWeapons();
+            }).then(() => {
+                return this.insertClasses();
+            }).then(() => {
+                resolve();
+            }).catch((e) => {
+                reject(e);
+            });
+        });
+    },
+
+    // Classes
+
+    insertClasses() {
+        return new Promise((resolve, reject) => {
+            const collection = this.instance.collection('classes');
+            const spells = require('../data/class.json');
+            collection.insert(spells, (err, records) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve();
+            });
+        });
+    },
+    getClasses() {
+        return new Promise((resolve, reject) => {
+            const collection = this.instance.collection('classes');
+            collection.find().toArray((err, infos) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(infos);
+            });
+        });
+    },
 
     // Spells
 
@@ -33,17 +74,17 @@ const obj = {
             });
         });
     },
-    getClasses() {
-        return new Promise((resolve, reject) => {
-            const collection = this.instance.collection('spells');
-            collection.distinct('class_name', ((err, classes) => {
-                if (err) {
-                    reject(err);
-                }
-                resolve(classes);
-            }));
-        });
-    },
+    //    getClasses() {
+    //        return new Promise((resolve, reject) => {
+    //            const collection = this.instance.collection('spells');
+    //            collection.distinct('class_name', ((err, classes) => {
+    //                if (err) {
+    //                    reject(err);
+    //                }
+    //                resolve(classes);
+    //            }));
+    //        });
+    //    },
     getClassPassives(className) {
         return new Promise((resolve, reject) => {
             const collection = this.instance.collection('spells');
@@ -157,21 +198,24 @@ const obj = {
             };
             let total = 0;
             this.getClasses().then((classes) => {
-                classes.forEach((className) => {
+                classes.forEach((classData) => {
                     let currentClass = {
-                        'name': className,
+                        'name': classData.name,
+                        'characteristics': classData.characteristics,
+                        'ressource': classData.ressource,
+                        'class_image': classData.class_image,
                         'children': [],
                         'treeLevel': 2
                     };
                     json.children.push(currentClass);
                     total++;
-                    this.getClassPassives(className).then((passives) => {
+                    this.getClassPassives(currentClass.name).then((passives) => {
                         currentClass.children.push({
                             'name': 'Compétences passives',
                             'children': passives,
                             'treeLevel': 3
                         });
-                        return this.getClassActives(className);
+                        return this.getClassActives(currentClass.name);
                     }).then((actives) => {
                         currentClass.children.push({
                             'name': 'Compétences actives',

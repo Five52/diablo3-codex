@@ -7,22 +7,10 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-router.get('/insertSpells', function(req, res, next) {
-    mongodb.insertSpells().then(() => {
-        res.render('index', {title: 'Compétences ajoutées'});
-    });
-});
-
-router.get('/insertArmors', function(req, res, next) {
-    mongodb.insertArmors().then(() => {
-        res.render('index', {title: 'Armures ajoutées'});
-    });
-});
-
-router.get('/insertWeapons', function(req, res, next) {
-    mongodb.insertWeapons().then(() => {
-        res.render('index', {title: 'Armes ajoutées'});
-    });
+router.get('/insert', function(req, res, next) {
+    mongodb.insertAll().then(() => {
+        res.send('OK');
+    })
 });
 
 router.get('/spells', function(req, res, next) {
@@ -39,6 +27,12 @@ router.get('/weapons', function(req, res, next) {
 
 router.get('/api/spells', function(req, res, next) {
     mongodb.getSpells().then((json) => {
+        res.json(json);
+    });
+});
+
+router.get('/api/classes', function(req, res, next) {
+    mongodb.getClasses().then((json) => {
         res.json(json);
     });
 });
