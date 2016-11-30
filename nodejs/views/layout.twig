@@ -15,7 +15,8 @@
             </nav>
         </header>
         <main>
-            {% block body %}{% endblock %}
+            {% block main %}{% endblock %}
+                {% block graph %}{% endblock %}
         </main>
         <footer>
             {% include 'partials/footer.twig' %}

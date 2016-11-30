@@ -55,10 +55,14 @@ h1 {
 
 main {
     flex: 1;
+    padding: 10px;
+}
+
+#graph {
+    height: 100%;
     display: flex;
     flex-flow: column;
     justify-content: center;
-    padding: 10px;
 }
 
 section {

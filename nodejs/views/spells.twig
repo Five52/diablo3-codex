@@ -1,12 +1,17 @@
 {% extends 'layout.twig' %}
 
-{% block body %}
-    <div class="flex">
-        <div id="svg"></div>
-        <div id="infos">
-            <div id="infos-centered">
-                <h2>Données sélectionnées:</h2>
-                <div id="infos-displayed"></div>
+{% block main %}
+    <h1>Compétences</h1>
+{% endblock %}
+{% block graph %}
+    <div id="graph">
+        <div class="flex">
+            <div id="svg"></div>
+            <div id="infos">
+                <div id="infos-centered">
+                    <h2>Données sélectionnées:</h2>
+                    <div id="infos-displayed"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -93,7 +98,7 @@ d3.json("/api/spells", function(error, root) {
         .text(function(d) {
             return d;
         })
-        .each(function(d) { 
+        .each(function(d) {
             this._current = updateArc(d); })
         .on("click", function(d) {
             zoomIn(d);
@@ -242,7 +247,7 @@ function updateInfos(d) {
             }
 
             if (d.treeLevel == 2) { //click sur class
-                currentElem =  d;             
+                currentElem =  d;
             } else { //click sur type
                 currentElem =  d.parent;
             }
@@ -257,9 +262,9 @@ function updateInfos(d) {
             }
 
             if (d.treeLevel == 3) { //click sur type
-                currentElem =  d;             
+                currentElem =  d;
             } else {  //click catégorie (active) ou compétence (passive)
-                currentElem =  d.parent;                
+                currentElem =  d.parent;
             }
 
             html += ' id="classe"';
@@ -274,7 +279,7 @@ function updateInfos(d) {
                 }
 
                 if (d.treeLevel == 4) { //catégorie
-                    currentElem =  d;             
+                    currentElem =  d;
                 } else { //compétence
                     currentElem =  d.parent;
                 }
@@ -307,7 +312,7 @@ function updateInfos(d) {
                 }
 
                 if (d.class_name) { //compétences
-                    currentElem =  d;                                 
+                    currentElem =  d;
                 } else { //rune
                     currentElem =  d.parent;
                 }
@@ -343,13 +348,13 @@ function updateInfos(d) {
 
         if (currentElem.level) {
             html += "<h4>Niveau minimum:</h4>";
-            html += "<p>" + currentElem.level + "</p>";  
+            html += "<p>" + currentElem.level + "</p>";
         }
         if (currentElem.description) {
             html += "<h4>Description:</h4>";
-            html += "<p>" + restoreMultiline(currentElem.description) + "</p>";  
+            html += "<p>" + restoreMultiline(currentElem.description) + "</p>";
         }
-        
+
         html += "</div>";
     }
     node.innerHTML += html;
@@ -370,7 +375,7 @@ function restoreMultiline(i) {
             if (str[i] == str[str.length]) {
                 returnStr += str[i];
             }
-            returnStr += str[i] + "<br />"; 
+            returnStr += str[i] + "<br />";
         }
         return returnStr;
     } else { //l'élément est déjà bien mis en forme
@@ -393,7 +398,7 @@ function deleteLatestInfos() {
             node.removeChild(node.lastChild);
         }
     }
-   return; 
+   return;
 }
 </script>
 {% endblock %}

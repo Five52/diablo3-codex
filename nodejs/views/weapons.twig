@@ -1,12 +1,17 @@
 {% extends 'layout.twig' %}
 
-{% block body %}
-    <div class="flex">
-        <div id="svg"></div>
-        <div id="infos">
-            <div id="infos-centered">
-                <h2>Données sélectionnées:</h2>
-                <div id="infos-displayed"></div>
+{% block main %}
+    <h1>Armes</h1>
+{% endblock %}
+{% block graph %}
+    <div id="graph">
+        <div class="flex">
+            <div id="svg"></div>
+            <div id="infos">
+                <div id="infos-centered">
+                    <h2>Données sélectionnées:</h2>
+                    <div id="infos-displayed"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -92,7 +97,7 @@ d3.json("api/weapons", function(error, root) {
         .text(function(d) {
             return d;
         })
-        .each(function(d) { 
+        .each(function(d) {
             this._current = updateArc(d); })
         .on("click", function(d) {
             zoomIn(d);
@@ -241,7 +246,7 @@ function updateInfos(d) {
             }
 
             if (d.treeLevel == 2) { //click sur slot
-                currentElem =  d;             
+                currentElem =  d;
             } else { //click sur qualité
                 currentElem =  d.parent;
             }
@@ -256,9 +261,9 @@ function updateInfos(d) {
             }
 
             if (d.treeLevel == 3) { //click sur qualité
-                currentElem =  d;             
+                currentElem =  d;
             } else {  //click sur stuff
-                currentElem =  d.parent;                
+                currentElem =  d.parent;
             }
 
             html += ' id="type"';
@@ -292,27 +297,27 @@ function updateInfos(d) {
 
         if (currentElem.level) {
             html += "<h4>Niveau minimum:</h4>";
-            html += "<p>" + currentElem.level + "</p>";  
+            html += "<p>" + currentElem.level + "</p>";
         }
         if (currentElem.damage) {
             html += "<h4>Statistique de dps:</h4>";
-            html += "<p>" + restoreMultiline(currentElem.damage) + "</p>";  
+            html += "<p>" + restoreMultiline(currentElem.damage) + "</p>";
         }
         if (currentElem.property_default) {
             html += "<h4>Propriété par défaut:</h4>";
-            html += "<p>" + restoreMultiline(currentElem.property_default) + "</p>";  
+            html += "<p>" + restoreMultiline(currentElem.property_default) + "</p>";
         }
         if (currentElem.property_utility) {
             html += "<h4>Propriété secondaire:</h4>";
-            html += "<p>" + restoreMultiline(currentElem.property_utility) + "</p>";  
+            html += "<p>" + restoreMultiline(currentElem.property_utility) + "</p>";
         }
         if (currentElem.property_choice) {
             html += "<h4>Propriété aléatoire prédéfinie:</h4>";
-            html += "<p>" + restoreMultiline(currentElem.property_choice) + "</p>";  
+            html += "<p>" + restoreMultiline(currentElem.property_choice) + "</p>";
         }
         if (currentElem.property_random) {
             html += "<h4>Propriété aléatoire non définie:</h4>";
-            html += "<p>" + currentElem.property_random + "</p>";  
+            html += "<p>" + currentElem.property_random + "</p>";
         }
         if (currentElem.property_socket) {
             html += "<h4>Chasse(s):</h4>";
@@ -320,23 +325,23 @@ function updateInfos(d) {
         }
         if (currentElem.craft) {
             html += "<h4>Condition de fabriquation:</h4>";
-            html += "<p>" + currentElem.craft + "</p>";  
+            html += "<p>" + currentElem.craft + "</p>";
         }
         if (currentElem["item-extra"] || currentElem["item-unique"]) {
             html += "<h4>Etat particulier:</h4>";
 
             if (currentElem["item-unique"]) {
-                html += "<p>" + currentElem["item-unique"] + "</p>";  
+                html += "<p>" + currentElem["item-unique"] + "</p>";
             }
             if (currentElem["item-extra"]) {
-                html += "<p>" + currentElem["item-extra"] + "</p>";  
-            } 
+                html += "<p>" + currentElem["item-extra"] + "</p>";
+            }
         }
         if (currentElem.set) {
             html += "<h4>Fait partie du set:</h4>";
-            html += "<p>" + currentElem.set + "</p>";  
+            html += "<p>" + currentElem.set + "</p>";
         }
-        
+
         html += "</div>";
     }
     node.innerHTML += html;
@@ -357,7 +362,7 @@ function restoreMultiline(i) {
             if (str[i] == str[str.length]) {
                 returnStr += str[i];
             }
-            returnStr += str[i] + "<br />"; 
+            returnStr += str[i] + "<br />";
         }
         return returnStr;
     } else { //l'élément est déjà bien mis en forme
@@ -380,7 +385,7 @@ function deleteLatestInfos() {
             node.removeChild(node.lastChild);
         }
     }
-   return; 
+   return;
 }
 </script>
 {% endblock %}
