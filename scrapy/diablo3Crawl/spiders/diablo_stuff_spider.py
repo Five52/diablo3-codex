@@ -19,7 +19,7 @@ class DiabloStuffSpider(scrapy.Spider):
             return "magique"
         elif x[len(x)-1] == "rare" or x[len(x)-1] == "rares":
             return "rare"
-        elif x[len(x)-1] == "d'ensemble":
+        elif x[len(x)-1] == "d\u2019ensemble":
             return "d'ensemble"
         else:
             return "commun"

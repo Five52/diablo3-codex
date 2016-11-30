@@ -206,8 +206,8 @@ d3.select(self.frameElement).style("height", margin.top + margin.bottom + "px");
 
 function tooltipOver(d) {
     var details = "<h2>" + d.name + "</h2>";
-    if (d.description) {
-        details += "<p>" + d.description + "</p>";
+    if (d.level) {
+        details += "<p>level: " + d.level + "</p>";
 }
     tooltip.transition()
         .duration(500)
@@ -229,8 +229,7 @@ function updateInfos(d) {
     let html = '<div';
     let titleElem = "";
     let currentElem = d;
-    console.log(countNode);
-    console.log(d);
+
     switch (countNode) {
         case 0: //INIT, rien de select
             countNode++;
@@ -282,11 +281,87 @@ function updateInfos(d) {
     }
 
     html +="><h3>" + titleElem + ": " + currentElem.name + "</h3>";
-    if (currentElem.property_default) {
-        html += "<p>" + currentElem.property_default + "</p>";
+    if (currentElem.img_link) {
+        html += "<div class=\"detailStuff\">";
+
+        imgLink = returnImgLink(currentElem);
+        if (imgLink) {
+            html += "<img src=\"" + imgLink + "\" class=\"miniature\">";
+        }
+
+        if (currentElem.level) {
+            html += "<h4>Niveau minimum:</h4>";
+            html += "<p>" + currentElem.level + "</p>";  
+        }
+        if (currentElem.armor) {
+            html += "<h4>Statistique d'armure:</h4>";
+            html += "<p>" + restoreMultiline(currentElem.armor) + "</p>";  
+        }
+        if (currentElem.property_default) {
+            html += "<h4>Propriété par défaut:</h4>";
+            html += "<p>" + restoreMultiline(currentElem.property_default) + "</p>";  
+        }
+        if (currentElem.property_utility) {
+            html += "<h4>Propriété secondaire:</h4>";
+            html += "<p>" + restoreMultiline(currentElem.property_utility) + "</p>";  
+        }
+        if (currentElem.property_choice) {
+            html += "<h4>Propriété aléatoire prédéfinie:</h4>";
+            html += "<p>" + restoreMultiline(currentElem.property_choice) + "</p>";  
+        }
+        if (currentElem.property_random) {
+            html += "<h4>Propriété aléatoire non définie:</h4>";
+            html += "<p>" + currentElem.property_random + "</p>";  
+        }
+        if (currentElem.property_socket) {
+            html += "<h4>Chasse(s):</h4>";
+            html += "<p>" + restoreMultiline(currentElem.property_socket) + "</p>";
+        }
+        if (currentElem.craft) {
+            html += "<h4>Condition de fabriquation:</h4>";
+            html += "<p>" + currentElem.craft + "</p>";  
+        }
+        if (currentElem["item-extra"] || currentElem["item-unique"]) {
+            html += "<h4>Etat particulier:</h4>";
+
+            if (currentElem["item-unique"]) {
+                html += "<p>" + currentElem["item-unique"] + "</p>";  
+            }
+            if (currentElem["item-extra"]) {
+                html += "<p>" + currentElem["item-extra"] + "</p>";  
+            } 
+        }
+        if (currentElem.set) {
+            html += "<h4>Fait partie du set:</h4>";
+            html += "<p>" + currentElem.set + "</p>";  
+        }
+        
+        html += "</div>";
     }
-    html += "</div>";
     node.innerHTML += html;
+}
+
+function returnImgLink(i) {
+    if(i.img_link){
+        return i.img_link.match(/http.*\.png/g)[0];
+    }
+    return;
+}
+
+function restoreMultiline(i) {
+    let returnStr = "";
+    str = i.split(" & ");
+    if (str[1]) {
+        for (i = 0; i < str.length; i++) {
+            if (str[i] == str[str.length]) {
+                returnStr += str[i];
+            }
+            returnStr += str[i] + "<br />"; 
+        }
+        return returnStr;
+    } else { //l'élément est déjà bien mis en forme
+        return str;
+    }
 }
 
 function deleteLatestInfos() {
