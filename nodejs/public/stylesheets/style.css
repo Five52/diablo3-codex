@@ -55,6 +55,8 @@ h1 {
 
 main {
     flex: 1;
+    display: flex;
+    flex-flow: column;
     justify-content: center;
     padding: 10px;
 }
@@ -124,9 +126,27 @@ div.tooltip>* {
     justify-content: center;
 }
 
+#infos-displayed {
+    border: 3px solid #380e00;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 5px 5px lightgray;
+}
+
 footer {
     text-align: center;
     margin: 10px;
     padding-top: 10px;
     border-top: 2px solid #380e00;
+}
+
+.miniature {
+    float: left;
+    margin-right: 15px;
+}
+
+.detailStuff {
+    margin-left: 15px;
+    padding-left: 15px;
+    border-left: 3px solid #380e00;
 }
