@@ -4,7 +4,7 @@ const mongodb = require('../src/mongo.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index');
 });
 
 router.get('/insertSpells', function(req, res, next) {

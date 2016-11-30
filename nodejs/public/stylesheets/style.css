@@ -9,11 +9,71 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   display: flex;
   flex-flow: column;
-  justify-content: center;
 }
 
-a {
-  color: #00B7FF;
+header {
+    padding: 10px;
+    box-shadow: 0px 5px 5px lightgray;
+    margin-bottom: 20px;
+    background-color: #380e00;
+    color: white;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    flex-flow: row;
+}
+
+nav ul li + li::before {
+    content: "/";
+    margin-right: 1em;
+}
+
+header a:link, header a:visited {
+    color: #e3af4a;
+}
+
+header h1 {
+    text-align: center;
+    text-shadow: 0px 1px 2px #000;
+}
+
+h1 {
+    color: #380e00;
+    border-bottom: 2px solid #380e00;
+}
+
+main {
+    flex: 1;
+    justify-content: center;
+    padding: 10px;
+}
+
+section {
+    margin-top: 15px;
+}
+
+a:link, a:visited {
+    color: #6a1700;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+ul li {
+    margin-left: 15px;
 }
 
 circle, path {
@@ -61,4 +121,11 @@ div.tooltip>* {
     display: flex;
     flex-flow: column;
     justify-content: center;
+}
+
+footer {
+    text-align: center;
+    margin: 10px;
+    padding-top: 10px;
+    border-top: 2px solid #380e00;
 }

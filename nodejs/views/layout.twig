@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ title }}</title>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}Diablo 3 Codex{% endblock %}
+        </title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            {% include 'partials/header.twig' %}
+            <nav>
+                {% include 'partials/nav.twig' %}
+            </nav>
+        </header>
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+        <footer>
+            {% include 'partials/footer.twig' %}
+        </footer>
         {% block javascript %}{% endblock %}
     </body>
 </html>

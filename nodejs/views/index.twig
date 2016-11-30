@@ -1,6 +1,35 @@
 {% extends 'layout.twig' %}
 
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
 {% block body %}
-  <h1>{{title}}</h1>
-  <p>Welcome to {{title}}</p>
+    <h1>Accueil</h1>
+    <section>
+        <h2>Decriptions</h2>
+        <p>
+            Le Diablo 3 Codex est un projet réalisé dans le cadre du Master 2 DNR2i à l'Université de Caen Normandie. Ce projet a pour but de créer un explorateur de données récupérées grâce à un crawler et mises sous la forme d'un graphe dynamique.
+        </p>
+        <p>
+            Ce projet a pris la forme d'un codex sur le thème de <a href="http://blizzard.com/diablo3/">Diablo 3</a>. Il recense les compétences de chaque classe, les armes et les éléments d'armure qui seront obtenues dans l'aventure.
+        </p>
+    </section>
+    <section>
+        <h2>Technologies utilisées</h2>
+        <ul>
+            <li>
+                <a href="https://scrapy.org/">Scrapy</a> : crawler utilisé pour récupérer les données sur <a href="http://eu.battle.net/d3/fr/game/">le site officiel de Blizzard</a> et les épurer ;
+            </li>
+            <li>
+                <a href="https://www.mongodb.com/">MongoDB</a> : base de données NoSQL pour le stockage ;
+            </li>
+            <li>
+                <a href="https://d3js.org/">D3.js</a> : librairie JavaScript pour la manipulation et visualisation des données ; le modèle <a href="http://bl.ocks.org/mbostock/5944371">"Bilevel Partition"</a> a été utilisé ;
+            </li>
+            <li>
+                <a href="https://nodejs.org">Node.js</a> : serveur JavaScript pour le backend.
+            </li>
+        </ul>
+    </section>
 {% endblock %}
