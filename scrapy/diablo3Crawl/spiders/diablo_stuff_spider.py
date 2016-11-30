@@ -13,11 +13,16 @@ class DiabloStuffSpider(scrapy.Spider):
         if not x:
             return None
         x = x.split()
-        if len(x) > 1:
-            if x[len(x)-1] == "croisé":
-                return "commun"
-            return x[len(x)-1]
-        return "commun"
+        if x[len(x)-1] == "légendaire" or x[len(x)-1] == "légendaires":
+            return "légendaire"
+        elif x[len(x)-1] == "magique" or x[len(x)-1] == "magiques":
+            return "magique"
+        elif x[len(x)-1] == "rare" or x[len(x)-1] == "rares":
+            return "rare"
+        elif x[len(x)-1] == "d'ensemble":
+            return "d'ensemble"
+        else:
+            return "commun"
 
     def cleanHtml(self, x): #nettoyage balise html
         if not x:

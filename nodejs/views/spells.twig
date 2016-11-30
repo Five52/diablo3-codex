@@ -52,7 +52,7 @@ var tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-d3.json("/spells", function(error, root) {
+d3.json("/api/spells", function(error, root) {
     if (error) throw error;
 
     // Compute the initial layout on the entire tree to sum sizes.
@@ -105,14 +105,6 @@ d3.json("/spells", function(error, root) {
         .on("mouseout", function(d) {
             tooltipOut(d);
         });
-//    g.append("text")
-//        .attr("class", "nodetext")
-//        .append("textPath")
-//        .attr("href", function (d,i) { return "#" + i; })
-//        .text(function (d) {
-//            return d;
-//        });
-
 
     function zoomIn(p) {
         if (p.depth > 1) p = p.parent;
