@@ -208,7 +208,7 @@ d3.select(self.frameElement).style("height", margin.top + margin.bottom + "px");
 function tooltipOver(d) {
     var details = "<h2>" + d.name + "</h2>";
     if (d.description) {
-        details += "<p>" + d.description + "</p>";
+        details += "<p>" + restoreMultiline(d.description) + "</p>";
 }
     tooltip.transition()
         .duration(500)
@@ -333,11 +333,49 @@ function updateInfos(d) {
     }
 
     html +="><h3>" + titleElem + ": " + currentElem.name + "</h3>";
-    if (currentElem.description) {
-        html += "<p>" + currentElem.description + "</p>";
+    if (currentElem.level) {
+        html += "<div class=\"detailStuff\">";
+
+        imgLink = returnImgLink(currentElem);
+        if (imgLink) {
+            html += "<img src=\"" + imgLink + "\" class=\"miniature\">";
+        }
+
+        if (currentElem.level) {
+            html += "<h4>Niveau minimum:</h4>";
+            html += "<p>" + currentElem.level + "</p>";  
+        }
+        if (currentElem.description) {
+            html += "<h4>Description:</h4>";
+            html += "<p>" + restoreMultiline(currentElem.description) + "</p>";  
+        }
+        
+        html += "</div>";
     }
-    html += "</div>";
     node.innerHTML += html;
+}
+
+function returnImgLink(i) {
+    if(i.img_link){
+        return i.img_link.match(/http.*\.png/g)[0];
+    }
+    return;
+}
+
+function restoreMultiline(i) {
+    let returnStr = "";
+    str = i.split(" & ");
+    if (str[1]) {
+        for (i = 0; i < str.length; i++) {
+            if (str[i] == str[str.length]) {
+                returnStr += str[i];
+            }
+            returnStr += str[i] + "<br />"; 
+        }
+        return returnStr;
+    } else { //l'élément est déjà bien mis en forme
+        return str;
+    }
 }
 
 function deleteLatestInfos() {

@@ -206,8 +206,8 @@ d3.select(self.frameElement).style("height", margin.top + margin.bottom + "px");
 
 function tooltipOver(d) {
     var details = "<h2>" + d.name + "</h2>";
-    if (d.description) {
-        details += "<p>" + d.description + "</p>";
+    if (d.level) {
+        details += "<p>level: " + d.level + "</p>";
 }
     tooltip.transition()
         .duration(500)
@@ -288,7 +288,7 @@ function updateInfos(d) {
         if (imgLink) {
             html += "<img src=\"" + imgLink + "\" class=\"miniature\">";
         }
-        
+
         if (currentElem.level) {
             html += "<h4>Niveau minimum:</h4>";
             html += "<p>" + currentElem.level + "</p>";  
