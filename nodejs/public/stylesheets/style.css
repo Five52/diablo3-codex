@@ -94,6 +94,7 @@ div.tooltip {
     font-size: 12px;
     color: #000;
     position: absolute;
+    top: 0;
     text-align: center;
     width: auto;
     max-width: 600px;
